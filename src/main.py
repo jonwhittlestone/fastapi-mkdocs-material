@@ -5,8 +5,8 @@ from fastapi import FastAPI, Request
 from starlette.staticfiles import StaticFiles
 
 app = FastAPI()
-templates = Jinja2Templates("templates")
-app.mount("/static", StaticFiles(directory="templates/static"), name="static")
+templates = Jinja2Templates("tech-docs")
+app.mount("/assets", StaticFiles(directory="tech-docs/assets"), name="assets")
 
 
 @app.get("/")
@@ -14,9 +14,9 @@ def read_root():
     return {"Hello": "World"}
 
 
-@app.get("/welcome")
-def welcome(request: Request):
-    return templates.TemplateResponse("index.html", {"request": request})
+@app.get("/tech-docs/{file_path:path}")
+def tech_docs(request: Request, file_path: str):
+    return templates.TemplateResponse(f"{file_path}", {"request": request})
 
 
 @app.get("/items/{item_id}")
